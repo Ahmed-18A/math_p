@@ -6,6 +6,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -83,29 +84,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void ch_answer(View view) {
-        int n1 = Integer.parseInt(num1.getText().toString());
-        int n2 = Integer.parseInt(num2.getText().toString());
-        double userAnswer = Double.parseDouble(answer.getText().toString());
-        double correctAnswer = 0;
+        if (!(num1.getText().toString().isEmpty() || num2.getText().toString().isEmpty() || answer.getText().toString().isEmpty())) {
+            int n1 = Integer.parseInt(num1.getText().toString());
+            int n2 = Integer.parseInt(num2.getText().toString());
+            double userAnswer = Double.parseDouble(answer.getText().toString());
+            double correctAnswer = 0;
 
-        if (m == 1) { // +
-            correctAnswer = n1 + n2;
-        } else if (m == 2) { // -
-            correctAnswer = n1 - n2;
-        } else if (m == 3) { // *
-            correctAnswer = n1 * n2;
-        } else if (m == 4) { // /
-            correctAnswer = (double) n1 / n2;
+            if (m == 1) // +
+                correctAnswer = n1 + n2;
+            if (m == 2)  // -
+                correctAnswer = n1 - n2;
+            if (m == 3)  // *
+                correctAnswer = n1 * n2;
+            if (m == 4)  // /
+                correctAnswer = (double) n1 / n2;
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            if (Math.abs(userAnswer - correctAnswer) < 0.01) {
+                ch_box.setText("أحسنت");
+                ch_box.setTextColor(0xFF388E3C);
+            } else {
+                ch_box.setText("خطأ, الاجابة هي: " + correctAnswer);
+                ch_box.setTextColor(0xFFD32F2F);
+            }
         }
-
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        if (Math.abs(userAnswer - correctAnswer) < 0.0001) {
-            ch_box.setText("أحسنت");
-            ch_box.setTextColor(0xFF388E3C);
-        } else {
-            ch_box.setText("خطأ, الاجابة هي: " + correctAnswer);
-            ch_box.setTextColor(0xFFD32F2F);
-        }
+        else
+            Toast.makeText(this, "يجب ادخال الاجابة وتوليد ارقام", Toast.LENGTH_SHORT).show();
     }
 }
